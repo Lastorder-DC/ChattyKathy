@@ -108,7 +108,8 @@ function ChattyKathy(settings) {
             var params = {
                 OutputFormat: 'mp3',
                 Text: message,
-                VoiceId: settings.pollyVoiceId
+                VoiceId: settings.pollyVoiceId,
+                TextType: message.indexOf("<speak>") === -1 ? "text" : "ssml",
             }
             polly.synthesizeSpeech(params, function (error, data) {
                 if (error) {
