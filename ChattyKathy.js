@@ -21,7 +21,6 @@
  */
 
 function ChattyKathy(settings) {
-
     settings = getValidatedSettings(settings);
 
     // Add audio node to html
@@ -51,6 +50,7 @@ function ChattyKathy(settings) {
         ShutUp: function(){
             shutUp();
         },
+        
         // Speak & return promise
         SpeakWithPromise: function (msg) {
             return say(msg);
@@ -62,12 +62,20 @@ function ChattyKathy(settings) {
 
         ForgetCachedSpeech: function () {
             localStorage.removeItem("chattyKathyDictionary");
+        },
+        
+        SetVolume: function (volume) {
+            settings.volume = volume;
+        },
+        
+        GetVolume: function () {
+            return settings.volume;
         }
-
     }
-
+    
     // Quit talking
     function shutUp() {
+        isSpeaking = false;
         audioElement.pause();
         playlist = [];
     }
@@ -171,6 +179,7 @@ function ChattyKathy(settings) {
 
             var url = URL.createObjectURL(blob);
             audioElement.src = url;
+            audioElement.volume = settings.volume;
             audioElement.addEventListener("ended", function () {
                 isSpeaking = false;
                 success();
@@ -194,16 +203,13 @@ function ChattyKathy(settings) {
             settings.pollyVoiceId = "Amy";
         }
         if (typeof settings.cacheSpeech === 'undefined') {
-            settings.cacheSpeech === true;
+            settings.cacheSpeech = true;
+        }
+        if (typeof settings.volume === 'undefined') {
+            settings.volume = 1.0;
         }
         return settings;
     }
 
     return kathy;
 }
-
-
-
-
-
-
